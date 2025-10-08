@@ -41,6 +41,7 @@ import {
   Error,
   CarCrashOutlined,
   EventAvailable,
+  CurrencyPound,
 } from "@mui/icons-material";
 
 class ExpenseModel {
@@ -274,8 +275,6 @@ const CATEGORIES = {
   ],
 };
 
-// ==================== COMPONENTS ====================
-
 // Custom Tooltip for Charts
 const ChartTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
@@ -371,7 +370,7 @@ const AdviceCard = ({ advice }) => {
   );
 };
 
-// ==================== MAIN APP COMPONENT ====================
+// ==================== MAIN APP COMPONENT =====================
 
 export function App() {
   // Initialize models
@@ -467,532 +466,541 @@ export function App() {
   const categoryData = financialCalculator.getCategorySpending(expenses);
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br text-black from-blue-400 via-blue-50 to-indigo-300">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <img src={image} alt="" className="justify-items-end w-20 rounded-xl" />
-        {/* Header */}
-        <motion.header
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <div className="flex items-center justify-center mb-4">
-            <AccountBalanceWallet className="text-4xl text-blue-600 mr-4" />
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              MoneyMind
-            </h1>
-          </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Your smart financial companion that helps you understand and
-            optimize your spending habits
-          </p>
-        </motion.header>
+    <>
+      <div className="w-full min-h-screen bg-gradient-to-bl text-black from-blue-300 via-blue-50 to-indigo-300">
+        <div className="container mx-auto px-4 py-8 max-w-7xl">
+          <img
+            src={image}
+            alt=""
+            className="justify-items-end w-20 rounded-xl"
+          />
+          {/* Header */}
+          <motion.header
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
+          >
+            <div className="flex items-center justify-center mb-4">
+              <CurrencyPound className="text-4xl text-blue-600 mr-4" />
+              <h2 className="text-5xl font-bold italic bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                MoneyMind
+              </h2>
+            </div>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              Your smart financial companion that helps you understand and
+              optimize your spending habits
+            </p>
+          </motion.header>
 
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-          {/* Left Sidebar */}
-          <div className="xl:col-span-1 space-y-8">
-            {/* Budget Card */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Your Budget
-                </h2>
-                <Paid className="text-green-500 text-3xl" />
-              </div>
-
-              {/* Monthly Budget Input */}
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                  💰 Monthly Budget
-                </label>
-                <div className="relative">
-                  <AttachMoney className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
-                  <input
-                    type="number"
-                    value={budget.totalAmount}
-                    onChange={(e) =>
-                      updateBudget({ totalAmount: Number(e.target.value) })
-                    }
-                    className="w-full pl-10 pr-4 py-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    min="0"
-                  />
-                </div>
-              </div>
-
-              {/* Budget Allocation */}
-              <div className="space-y-2 mb-6">
-                <div className="flex justify-between text-sm">
-                  <span className="font-semibold text-green-600">
-                    Essential Needs
-                  </span>
-                  <span className="text-gray-600">
-                    {budget.needsPercentage}%
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="font-semibold text-purple-600">
-                    Lifestyle Wants
-                  </span>
-                  <span className="text-gray-600">
-                    {budget.wantsPercentage}%
-                  </span>
-                </div>
-              </div>
-
-              {/* Progress Bars */}
-              <ProgressBar
-                progress={financialSummary.needsProgress || 0}
-                label="Essential Needs"
-                spent={financialSummary.needsSpent || 0}
-                allocated={financialSummary.needsAllocation || 0}
-                color="green"
-              />
-
-              <ProgressBar
-                progress={financialSummary.wantsProgress || 0}
-                label="Lifestyle Wants"
-                spent={financialSummary.wantsSpent || 0}
-                allocated={financialSummary.wantsAllocation || 0}
-                color="purple"
-              />
-
-              {/* Quick Stats */}
-              <div className="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-gray-200">
-                <div className="text-center">
-                  <p className="text-sm text-gray-600">Remaining</p>
-                  <p className="text-xl font-bold text-green-600">
-                    ${(financialSummary.remainingBalance || 0).toFixed(2)}
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-sm text-gray-600">Total Spent</p>
-                  <p className="text-xl font-bold text-blue-600">
-                    ${(financialSummary.totalExpenses || 0).toFixed(2)}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Financial Advice */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <AdviceCard advice={financialAdvice} />
-            </motion.div>
-
-            {/* Add Expense Form */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200"
-            >
-              <div className="flex items-center mb-6">
-                <Add className="text-blue-500 text-2xl mr-3" />
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Add Expense
-                </h2>
-              </div>
-
-              <form onSubmit={addExpense} className="space-y-4">
-                {/* Expense Title */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    What did you spend on?
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.title}
-                    onChange={(e) =>
-                      setFormData({ ...formData, title: e.target.value })
-                    }
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="e.g., Groceries, Movie night..."
-                  />
+          <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+            {/* Left Sidebar */}
+            <div className="xl:col-span-1 space-y-8">
+              {/* Budget Card */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Your Budget
+                  </h2>
+                  <Paid className="text-green-500 text-3xl" />
                 </div>
 
-                {/* Amount */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Amount
+                {/* Monthly Budget Input */}
+                <div className="mb-6">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    💰 Monthly Budget
                   </label>
                   <div className="relative">
                     <AttachMoney className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
                     <input
                       type="number"
-                      step="0.01"
-                      value={formData.amount}
+                      value={budget.totalAmount}
                       onChange={(e) =>
-                        setFormData({ ...formData, amount: e.target.value })
+                        updateBudget({ totalAmount: Number(e.target.value) })
                       }
-                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                      placeholder="0.00"
+                      className="w-full pl-10 pr-4 py-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      min="0"
                     />
                   </div>
                 </div>
 
-                {/* Category */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Category
-                  </label>
-                  <div className="relative">
-                    <Category className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
-                    <select
-                      value={formData.category}
+                {/* Budget Allocation */}
+                <div className="space-y-2 mb-6">
+                  <div className="flex justify-between text-sm">
+                    <span className="font-semibold text-green-600">
+                      Essential Needs
+                    </span>
+                    <span className="text-gray-600">
+                      {budget.needsPercentage}%
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="font-semibold text-purple-600">
+                      Lifestyle Wants
+                    </span>
+                    <span className="text-gray-600">
+                      {budget.wantsPercentage}%
+                    </span>
+                  </div>
+                </div>
+
+                {/* Progress Bars */}
+                <ProgressBar
+                  progress={financialSummary.needsProgress || 0}
+                  label="Essential Needs"
+                  spent={financialSummary.needsSpent || 0}
+                  allocated={financialSummary.needsAllocation || 0}
+                  color="green"
+                />
+
+                <ProgressBar
+                  progress={financialSummary.wantsProgress || 0}
+                  label="Lifestyle Wants"
+                  spent={financialSummary.wantsSpent || 0}
+                  allocated={financialSummary.wantsAllocation || 0}
+                  color="purple"
+                />
+
+                {/* Quick Stats */}
+                <div className="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-gray-200">
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600">Remaining</p>
+                    <p className="text-xl font-bold text-green-600">
+                      ${(financialSummary.remainingBalance || 0).toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600">Total Spent</p>
+                    <p className="text-xl font-bold text-blue-600">
+                      ${(financialSummary.totalExpenses || 0).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Financial Advice */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <AdviceCard advice={financialAdvice} />
+              </motion.div>
+
+              {/* Add Expense Form */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200"
+              >
+                <div className="flex items-center mb-6">
+                  <Add className="text-blue-500 text-2xl mr-3" />
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Add Expense
+                  </h2>
+                </div>
+
+                <form onSubmit={addExpense} className="space-y-4">
+                  {/* Expense Title */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      What did you spend on?
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.title}
                       onChange={(e) =>
-                        setFormData({ ...formData, category: e.target.value })
+                        setFormData({ ...formData, title: e.target.value })
                       }
-                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none transition-all duration-200"
-                    >
-                      <option value="">Choose a category</option>
-                      <optgroup label="🏠 Essential Needs">
-                        {CATEGORIES.needs.map((category) => (
-                          <option key={category.name} value={category.name}>
-                            {category.name} - {category.description}
-                          </option>
-                        ))}
-                      </optgroup>
-                      <optgroup label="🎯 Lifestyle Wants">
-                        {CATEGORIES.wants.map((category) => (
-                          <option key={category.name} value={category.name}>
-                            {category.name} - {category.description}
-                          </option>
-                        ))}
-                      </optgroup>
-                    </select>
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      placeholder="e.g., Groceries, Movie night..."
+                    />
                   </div>
-                </div>
 
-                {/* Description */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Notes (Optional)
-                  </label>
-                  <textarea
-                    value={formData.description}
-                    onChange={(e) =>
-                      setFormData({ ...formData, description: e.target.value })
-                    }
-                    rows={2}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="Any additional details..."
-                  />
-                </div>
-
-                {/* Submit Button */}
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  type="submit"
-                  disabled={
-                    !formData.title || !formData.amount || !formData.category
-                  }
-                  className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 px-6 rounded-xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
-                >
-                  💾 Add Expense
-                </motion.button>
-              </form>
-            </motion.div>
-          </div>
-
-          {/* Main Content */}
-          <div className="xl:col-span-3 space-y-8">
-            {/* Charts Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200"
-            >
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-3xl font-bold text-gray-800">
-                  Financial Insights
-                </h2>
-                <Psychology className="text-purple-500 text-4xl" />
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Budget Distribution Pie Chart */}
-                <div>
-                  <div className="flex items-center mb-6">
-                    <DonutLarge className="text-green-500 text-2xl mr-3" />
-                    <h3 className="text-xl font-semibold text-gray-700">
-                      Where Your Money Goes
-                    </h3>
+                  {/* Amount */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Amount
+                    </label>
+                    <div className="relative">
+                      <AttachMoney className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={formData.amount}
+                        onChange={(e) =>
+                          setFormData({ ...formData, amount: e.target.value })
+                        }
+                        className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                        placeholder="0.00"
+                      />
+                    </div>
                   </div>
-                  <div className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={pieData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={70}
-                          outerRadius={100}
-                          paddingAngle={2}
-                          dataKey="value"
-                          label={({ name, percent }) =>
-                            `${name} (${(percent * 100).toFixed(1)}%)`
-                          }
-                          labelLine={false}
-                        >
-                          {pieData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip content={<ChartTooltip />} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
 
-                {/* Category Spending Bar Chart */}
-                <div>
-                  <div className="flex items-center mb-6">
-                    <BarChartIcon className="text-purple-500 text-2xl mr-3" />
-                    <h3 className="text-xl font-semibold text-gray-700">
-                      Spending by Category
-                    </h3>
-                  </div>
-                  <div className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={categoryData}>
-                        <CartesianGrid
-                          strokeDasharray="3 3"
-                          className="opacity-30"
-                        />
-                        <XAxis
-                          dataKey="name"
-                          angle={-45}
-                          textAnchor="end"
-                          height={80}
-                          fontSize={12}
-                        />
-                        <YAxis fontSize={12} />
-                        <Tooltip content={<ChartTooltip />} />
-                        <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
-                          {categoryData.map((entry, index) => (
-                            <Cell
-                              key={`cell-${index}`}
-                              fill={
-                                entry.type === "need" ? "#10B981" : "#8B5CF6"
-                              }
-                            />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Expenses List */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200"
-            >
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-3xl font-bold text-gray-800">
-                  Recent Expenses
-                </h2>
-                <div className="flex items-center space-x-4">
-                  <span className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">
-                    {expenses.length} transactions
-                  </span>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <AnimatePresence>
-                  {expenses.length === 0 ? (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="text-center py-16 text-gray-500"
-                    >
-                      <Savings className="text-6xl text-gray-300 mx-auto mb-4" />
-                      <p className="text-2xl font-semibold mb-2">
-                        No expenses yet
-                      </p>
-                      <p className="text-lg">
-                        Start by adding your first expense above! 📝
-                      </p>
-                    </motion.div>
-                  ) : (
-                    expenses.map((expense, index) => (
-                      <motion.div
-                        key={expense.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 20 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="flex items-center justify-between p-6 bg-gradient-to-r from-gray-50 to-white rounded-xl border-2 border-gray-100 hover:border-blue-200 hover:shadow-md transition-all duration-300 group"
+                  {/* Category */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Category
+                    </label>
+                    <div className="relative">
+                      <Category className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+                      <select
+                        value={formData.category}
+                        onChange={(e) =>
+                          setFormData({ ...formData, category: e.target.value })
+                        }
+                        className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none transition-all duration-200"
                       >
-                        <div className="grid grid-cols-1 items-center ">
-                          <div
-                            className={`p-4 rounded-2xl ${
-                              expense.type === "need"
-                                ? "bg-green-100 text-green-600"
-                                : "bg-purple-100 text-purple-600"
-                            } group-hover:scale-110 transition-transform duration-300`}
-                          >
-                            {React.createElement(
-                              CATEGORIES[expense.type + "s"].find(
-                                (cat) => cat.name === expense.category
-                              )?.icon || ShoppingCart,
-                              { className: "text-2xl" }
-                            )}
-                          </div>
-
-                          <div>
-                            <h3 className="text-xl font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-200">
-                              {expense.title}
-                            </h3>
-                            <div className="flex items-center space-x-3 text-sm text-gray-600 mt-2">
-                              <span
-                                className={`px-3 py-1 rounded-full font-medium ${
-                                  expense.type === "need"
-                                    ? "bg-green-100 text-green-700"
-                                    : "bg-purple-100 text-purple-700"
-                                }`}
-                              >
-                                {expense.type === "need"
-                                  ? "Essential"
-                                  : "Lifestyle"}
-                              </span>
-                              <span>•</span>
-                              <span>{expense.category}</span>
-                              <span>•</span>
-                              <span>
-                                {new Date(expense.date).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    month: "short",
-                                    day: "numeric",
-                                    year: "numeric",
-                                  }
-                                )}
-                              </span>
-                            </div>
-                            {expense.description && (
-                              <p className="text-gray-500 mt-2 max-w-md">
-                                {expense.description}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 items-center space-x-4">
-                          <motion.span
-                            className={`text-2xl font-bold ${
-                              expense.type === "need"
-                                ? "text-green-600"
-                                : "text-purple-600"
-                            }`}
-                            whileHover={{ scale: 1.1 }}
-                          >
-                            ${expense.amount.toFixed(2)}
-                          </motion.span>
-
-                          <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={() => deleteExpense(expense.id)}
-                            className="p-3 bg-gradient-to-b from-red-400 to-red-500 rounded-xl transition-colors duration-200 group/delete"
-                            title="Delete expense"
-                          >
-                            <Delete className="group-hover/delete:scale-110 transition-transform duration-200" />
-                          </motion.button>
-                        </div>
-                      </motion.div>
-                    ))
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Summary Footer */}
-              {expenses.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="mt-8 pt-8 border-t border-gray-200"
-                >
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <div className="text-center p-4 bg-green-50 rounded-2xl border-2 border-green-200">
-                      <p className="text-green-600 font-semibold mb-2">
-                        Essential Needs
-                      </p>
-                      <p className="text-2xl font-bold text-green-700">
-                        $
-                        {expenses
-                          .filter((e) => e.type === "need")
-                          .reduce((sum, e) => sum + e.amount, 0)
-                          .toFixed(2)}
-                      </p>
-                    </div>
-                    <div className="text-center p-4 bg-purple-50 rounded-2xl border-2 border-purple-200">
-                      <p className="text-purple-600 font-semibold mb-2">
-                        Lifestyle Wants
-                      </p>
-                      <p className="text-2xl font-bold text-purple-700">
-                        $
-                        {expenses
-                          .filter((e) => e.type === "want")
-                          .reduce((sum, e) => sum + e.amount, 0)
-                          .toFixed(2)}
-                      </p>
-                    </div>
-                    <div className="text-center p-4 bg-blue-50 rounded-2xl border-2 border-blue-200">
-                      <p className="text-blue-600 font-semibold mb-2">
-                        Daily Average
-                      </p>
-                      <p className="text-2xl font-bold text-blue-700">
-                        $
-                        {((financialSummary.totalExpenses || 0) / 30).toFixed(
-                          2
-                        )}
-                      </p>
-                    </div>
-                    <div className="text-center p-4 bg-orange-50 rounded-2xl border-2 border-orange-200">
-                      <p className="text-orange-600 font-semibold mb-2">
-                        Transactions
-                      </p>
-                      <p className="text-2xl font-bold text-orange-700">
-                        {expenses.length}
-                      </p>
+                        <option value="">Choose a category</option>
+                        <optgroup label="🏠 Essential Needs">
+                          {CATEGORIES.needs.map((category) => (
+                            <option key={category.name} value={category.name}>
+                              {category.name} - {category.description}
+                            </option>
+                          ))}
+                        </optgroup>
+                        <optgroup label="🎯 Lifestyle Wants">
+                          {CATEGORIES.wants.map((category) => (
+                            <option key={category.name} value={category.name}>
+                              {category.name} - {category.description}
+                            </option>
+                          ))}
+                        </optgroup>
+                      </select>
                     </div>
                   </div>
-                </motion.div>
-              )}
-            </motion.div>
+
+                  {/* Description */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Notes (Optional)
+                    </label>
+                    <textarea
+                      value={formData.description}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
+                      rows={2}
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      placeholder="Any additional details..."
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    disabled={
+                      !formData.title || !formData.amount || !formData.category
+                    }
+                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 px-6 rounded-xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
+                  >
+                    💾 Add Expense
+                  </motion.button>
+                </form>
+              </motion.div>
+            </div>
+
+            {/* Main Content */}
+            <div className="xl:col-span-3 space-y-8">
+              {/* Charts Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200"
+              >
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-3xl font-bold text-gray-800">
+                    Financial Insights
+                  </h2>
+                  <Psychology className="text-purple-500 text-4xl" />
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Budget Distribution Pie Chart */}
+                  <div>
+                    <div className="flex items-center mb-6">
+                      <DonutLarge className="text-green-500 text-2xl mr-3" />
+                      <h3 className="text-xl font-semibold text-gray-700">
+                        Where Your Money Goes
+                      </h3>
+                    </div>
+                    <div className="h-80">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={pieData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={70}
+                            outerRadius={100}
+                            paddingAngle={2}
+                            dataKey="value"
+                            label={({ name, percent }) =>
+                              `${name} (${(percent * 100).toFixed(1)}%)`
+                            }
+                            labelLine={false}
+                          >
+                            {pieData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          <Tooltip content={<ChartTooltip />} />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Category Spending Bar Chart */}
+                  <div>
+                    <div className="flex items-center mb-6">
+                      <BarChartIcon className="text-purple-500 text-2xl mr-3" />
+                      <h3 className="text-xl font-semibold text-gray-700">
+                        Spending by Category
+                      </h3>
+                    </div>
+                    <div className="h-80">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={categoryData}>
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            className="opacity-30"
+                          />
+                          <XAxis
+                            dataKey="name"
+                            angle={-45}
+                            textAnchor="end"
+                            height={80}
+                            fontSize={12}
+                          />
+                          <YAxis fontSize={12} />
+                          <Tooltip content={<ChartTooltip />} />
+                          <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
+                            {categoryData.map((entry, index) => (
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={
+                                  entry.type === "need" ? "#10B981" : "#8B5CF6"
+                                }
+                              />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Expenses List */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200"
+              >
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-3xl font-bold text-gray-800">
+                    Recent Expenses
+                  </h2>
+                  <div className="flex items-center space-x-4">
+                    <span className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">
+                      {expenses.length} transactions
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <AnimatePresence>
+                    {expenses.length === 0 ? (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-center py-16 text-gray-500"
+                      >
+                        <Savings className="text-6xl text-gray-300 mx-auto mb-4" />
+                        <p className="text-2xl font-semibold mb-2">
+                          No expenses yet
+                        </p>
+                        <p className="text-lg">
+                          Start by adding your first expense above! 📝
+                        </p>
+                      </motion.div>
+                    ) : (
+                      expenses.map((expense, index) => (
+                        <motion.div
+                          key={expense.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          transition={{ delay: index * 0.1 }}
+                          className="flex items-center justify-between p-6 bg-gradient-to-r from-gray-50 to-white rounded-xl border-2 border-gray-100 hover:border-blue-200 hover:shadow-md transition-all duration-300 group"
+                        >
+                          <div className="grid grid-cols-1 items-center ">
+                            <div
+                              className={`p-4 rounded-2xl ${
+                                expense.type === "need"
+                                  ? "bg-green-100 text-green-600"
+                                  : "bg-purple-100 text-purple-600"
+                              } group-hover:scale-110 transition-transform duration-300`}
+                            >
+                              {React.createElement(
+                                CATEGORIES[expense.type + "s"].find(
+                                  (cat) => cat.name === expense.category
+                                )?.icon || ShoppingCart,
+                                { className: "text-2xl" }
+                              )}
+                            </div>
+
+                            <div>
+                              <h3 className="text-xl font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-200">
+                                {expense.title}
+                              </h3>
+                              <div className="flex items-center space-x-3 text-sm text-gray-600 mt-2">
+                                <span
+                                  className={`px-3 py-1 rounded-full font-medium ${
+                                    expense.type === "need"
+                                      ? "bg-green-100 text-green-700"
+                                      : "bg-purple-100 text-purple-700"
+                                  }`}
+                                >
+                                  {expense.type === "need"
+                                    ? "Essential"
+                                    : "Lifestyle"}
+                                </span>
+                                <span>•</span>
+                                <span>{expense.category}</span>
+                                <span>•</span>
+                                <span>
+                                  {new Date(expense.date).toLocaleDateString(
+                                    "en-US",
+                                    {
+                                      month: "short",
+                                      day: "numeric",
+                                      year: "numeric",
+                                    }
+                                  )}
+                                </span>
+                              </div>
+                              {expense.description && (
+                                <p className="text-gray-500 mt-2 max-w-md">
+                                  {expense.description}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 items-center space-x-4">
+                            <motion.span
+                              className={`text-2xl font-bold ${
+                                expense.type === "need"
+                                  ? "text-green-600"
+                                  : "text-purple-600"
+                              }`}
+                              whileHover={{ scale: 1.1 }}
+                            >
+                              ${expense.amount.toFixed(2)}
+                            </motion.span>
+
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() => deleteExpense(expense.id)}
+                              className="p-3 bg-gradient-to-b from-red-400 to-red-500 rounded-xl transition-colors duration-200 group/delete"
+                              title="Delete expense"
+                            >
+                              <Delete className="group-hover/delete:scale-110 transition-transform duration-200" />
+                            </motion.button>
+                          </div>
+                        </motion.div>
+                      ))
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Summary Footer */}
+                {expenses.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="mt-8 pt-8 border-t border-gray-200"
+                  >
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                      <div className="text-center p-4 bg-green-50 rounded-2xl border-2 border-green-200">
+                        <p className="text-green-600 font-semibold mb-2">
+                          Essential Needs
+                        </p>
+                        <p className="text-2xl font-bold text-green-700">
+                          $
+                          {expenses
+                            .filter((e) => e.type === "need")
+                            .reduce((sum, e) => sum + e.amount, 0)
+                            .toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="text-center p-4 bg-purple-50 rounded-2xl border-2 border-purple-200">
+                        <p className="text-purple-600 font-semibold mb-2">
+                          Lifestyle Wants
+                        </p>
+                        <p className="text-2xl font-bold text-purple-700">
+                          $
+                          {expenses
+                            .filter((e) => e.type === "want")
+                            .reduce((sum, e) => sum + e.amount, 0)
+                            .toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="text-center p-4 bg-blue-50 rounded-2xl border-2 border-blue-200">
+                        <p className="text-blue-600 font-semibold mb-2">
+                          Daily Average
+                        </p>
+                        <p className="text-2xl font-bold text-blue-700">
+                          $
+                          {((financialSummary.totalExpenses || 0) / 30).toFixed(
+                            2
+                          )}
+                        </p>
+                      </div>
+                      <div className="text-center p-4 bg-orange-50 rounded-2xl border-2 border-orange-200">
+                        <p className="text-orange-600 font-semibold mb-2">
+                          Transactions
+                        </p>
+                        <p className="text-2xl font-bold text-orange-700">
+                          {expenses.length}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </motion.div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Toast Notifications */}
-      <ToastContainer
-        position="bottom-right"
-        autoClose={4000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        toastClassName="rounded-xl"
-        progressClassName="bg-gradient-to-r from-blue-500 to-purple-600"
-      />
-    </div>
+        {/* Toast Notifications */}
+        <ToastContainer
+          position="bottom-right"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          toastClassName="rounded-xl"
+          progressClassName="bg-gradient-to-r from-blue-500 to-purple-600"
+        />
+      </div>
+    </>
   );
 }
