@@ -21,6 +21,7 @@ body {
   min-height: 100vh;
 }
 
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -42,6 +43,7 @@ button {
   button {
     background-color: #131111;
     color: #ffffff;
+  
   }
 }
 @import "tailwindcss";
